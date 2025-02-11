@@ -29,7 +29,12 @@ class HintStrategy:
         pass
 
     def top_k(
-        self, game: Game, k=25, min_len=3, hint_for_red=True, only_best_per_word=True
+        self,
+        game: Game,
+        k: int = 25,
+        min_len: int = 3,
+        hint_for_red: bool = True,
+        only_best_per_word: bool = True,
     ) -> list[Hint]:
         seen = set()
         hints = []
@@ -44,7 +49,7 @@ class HintStrategy:
         by_score = sorted(hints, key=lambda hint: hint.score, reverse=True)
         return by_score[:k]
 
-    def print_top_k(self, game, *args, **kwargs) -> None:
+    def print_top_k(self, game: Game, *args, **kwargs) -> None:
         print(
             self.__class__.__name__,
             f"({'red' if kwargs.get('hint_for_red', True) else 'blue'})",
@@ -70,13 +75,6 @@ class EmbeddingSimilarity(HintStrategy):
         hint_words: dict[str, int],
         weights: TeamWeights | None = None,
     ):
-        """
-
-        :param embeddings: some pretrained embeddings
-        :param words2ids: mapping game words to their embedding indices
-        :param hint_words: a mapping of words and indices for the hints
-        :param weights: factors for the incremental score calculation
-        """
         self.embeddings = embeddings
         self.words2ids = words2ids
         self.hint_words = hint_words
@@ -101,7 +99,7 @@ class EmbeddingSimilarity(HintStrategy):
                 score += similarity * getattr(self.weights, cat)
                 yield Hint(word=hint_word, score=score, targets=targets)
 
-    def calculate_similarities(self, game):
+    def calculate_similarities(self, game: Game) -> torch.Tensor:
         # calculate all similarities between hint words and game words
         with torch.no_grad():
             game_word_ids = self.words2ids(game.all_words)
@@ -122,11 +120,11 @@ class MaskFilling(HintStrategy):
 
     def __init__(
         self,
-        checkpoint="bert-base-uncased",
+        checkpoint: str = "bert-base-uncased",
         weights: TeamWeights | None = None,
         max_good_targets: int = 4,
         max_bad_targets: int = 1,
-        template=MASK_FILLING_TEMPLATE,
+        template: str = MASK_FILLING_TEMPLATE,
     ):
         self.unmasker = pipeline("fill-mask", model=checkpoint, device=device)
         self.weights = weights or self.default_weights
@@ -163,7 +161,7 @@ class MaskFilling(HintStrategy):
                     )
 
     @staticmethod
-    def words2string(words: Sequence[str]):
+    def words2string(words: Sequence[str]) -> str:
         return ", ".join(words[:-1]) + f" and {words[-1]}"
 
     def create_inputs(

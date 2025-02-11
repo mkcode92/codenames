@@ -33,14 +33,14 @@ class Game(BaseModel):
             + ["assassin"]
         )
 
-    def teams(self, red=True) -> list[str]:
+    def teams(self, red: bool = True) -> list[str]:
         team, other_team = ("red", "blue") if red else ("blue", "red")
         replace = {team: "team", other_team: "other_team"}
         return [replace.get(cat, cat) for cat in self.categories]
 
     @classmethod
-    def create_random(cls, start_team="red") -> Self:
-        n_red, n_blue = (9, 8) if start_team == "red" else (8, 9)
+    def create_random(cls, red: bool = True) -> Self:
+        n_red, n_blue = (9, 8) if red else (8, 9)
         game_words = random.sample(words, 25)
         return cls(
             red=game_words[:n_red],

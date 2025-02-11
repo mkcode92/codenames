@@ -10,7 +10,9 @@ cmap = {
 }
 
 
-def print_game(game: Game, sort=True, pad=10, targets: set[str] | None = None):
+def print_game(
+    game: Game, sort: bool = True, pad: int = 10, targets: set[str] | None = None
+) -> None:
     words, categories = game.all_words, game.categories
     targets = targets or set()
     if sort:

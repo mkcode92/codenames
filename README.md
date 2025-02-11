@@ -4,6 +4,8 @@ This is a small fun project to explore automatic ways to give hints in the famou
 
 However, it can also be used to implement your own strategies or to get ideas in a running game.
 
+The notebook demonstrates how the package can be used.
+
 # Setup
 
 Requirements:
