@@ -1,0 +1,34 @@
+[project]
+name = "codenames"
+version = "0.1.0"
+description = "Find good hints in the boardgame Codenames"
+authors = [
+    { name = "Markus Kobold", email = "mkcode92@gmail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.12"
+
+[[tool.poetry.source]]
+name = "pytorch-repo"
+url = "https://download.pytorch.org/whl/cu126"
+priority = "explicit"
+
+[tool.poetry.dependencies]
+jupyter = { version = ">=1.1.1,<2.0.0" }
+pydantic = "^2.10.6"
+transformers = { version = "^4.48.2", extras = ["torch"] }
+torch = { version = "2.6.0", source = "pytorch-repo" }
+colorama = "^0.4.6"
+scikit-learn = "^1.6.1"
+
+[tool.poetry.group.dev.dependencies]
+setuptools = { version = ">=75.8.0,<76.0.0" }
+black = { version = "^25.1.0", extras = ["jupyter"] }
+nbstripout = "^0.8.1"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.4"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
